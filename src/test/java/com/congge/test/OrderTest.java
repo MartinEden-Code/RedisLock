@@ -20,6 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.*;
 
+/**
+ * 测试4种分布式锁
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderTest {
@@ -54,7 +57,8 @@ public class OrderTest {
     @Test
     public void testRedissionLock() {
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://127.0.0.1:6379");
+        config.useSingleServer().setAddress("redis://localhost:6379");
+        config.useSingleServer().setPassword("yuantu123");
         RedissonClient redisson = Redisson.create(config);
         String key = "redisKey";
         RLock lock = redisson.getLock(key);
@@ -62,7 +66,7 @@ public class OrderTest {
         System.out.println("获取到了锁");
         try {
             System.out.println("开始执行业务逻辑");
-            Thread.sleep(10000);
+            Thread.sleep(1000);
             System.out.println("执行业务逻辑结束");
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -84,6 +88,12 @@ public class OrderTest {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.newClient("localhost:2181", retryPolicy);
         client.start();
+        /*
+        curator 的几种锁方案 ：
+            1、InterProcessMutex：分布式可重入排它锁
+            2、InterProcessSemaphoreMutex：分布式排它锁
+            3、InterProcessReadWriteLock：分布式读写锁
+        */
         InterProcessMutex lock = new InterProcessMutex(client, "/order");
         try {
             if (lock.acquire(30, TimeUnit.SECONDS)) {

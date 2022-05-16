@@ -22,6 +22,9 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -49,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseResult getOrderById(String id) {
-        Order order = orderMapper.selectById(id);
+        Order order = orderMapper.selectByPrimaryKey(id);
         return ResponseResult.success(order, 200);
     }
 
@@ -143,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return
      */
-    /*@Override
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResult createOrder() {
         String key = "redisKey";
@@ -163,15 +166,16 @@ public class OrderServiceImpl implements OrderService {
             Integer leftCount = currCount-purchaseProductNum;
             product.setCount(leftCount);
             //更新商品的库存
-            productMapper.updateById(product);
+            productMapper.updateByPrimaryKey(product);
             //订单表和订单详情表各自插入一条数据
+
             String orderId = insertOrder(product);
-            insertOrderItem(product, orderId);
+            //insertOrderItem(product, orderId);
             boolean unLock = redisLock.unLock();
             log.info("线程:{} ->释放锁,结果:{}",name,unLock);
         };
         return ResponseResult.success(200,"订单创建成功");
-    }*/
+    }
 
     @Autowired
     private RedissonClient redissonClient;
@@ -209,7 +213,12 @@ public class OrderServiceImpl implements OrderService {
         return ResponseResult.success(200, "订单创建成功");
     }*/
 
-    @Override
+    /**
+     * zkLock分布式锁
+     * @return
+     * @throws InterruptedException
+     */
+    /*@Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResult createOrder() throws InterruptedException {
         log.info("进入方法");
@@ -232,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
                 Integer leftCount = currCount - purchaseProductNum;
                 product.setCount(leftCount);
                 //更新商品的库存
-                productMapper.updateById(product);
+                productMapper.updateByPrimaryKey(product);
                 //订单表和订单详情表各自插入一条数据
                 String orderId = insertOrder(product);
                 insertOrderItem(product, orderId);
@@ -242,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
             log.info("线程:{} ->释放锁", name);
         }
         return ResponseResult.success(200, "订单创建成功");
-    }
+    }*/
 
 
 }

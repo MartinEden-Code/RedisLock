@@ -190,13 +190,16 @@ public class OrderController {
         return "success";
     }
 
-    @Autowired
-    private CuratorFramework client;
+    /**
+     * zookeeper 分布式锁客户端
+     */
+    /*@Autowired
+    private CuratorFramework zKclient;
 
     @GetMapping("/testCuratorLock")
     public String testCuratorLock() {
         logger.info("进入方法");
-        InterProcessMutex lock = new InterProcessMutex(client, "/order");
+        InterProcessMutex lock = new InterProcessMutex(zKclient, "/order");
         try {
             if (lock.acquire(30, TimeUnit.SECONDS)) {
                 logger.info("获取到了锁,开始执行耗时业务");
@@ -213,6 +216,6 @@ public class OrderController {
             }
         }
         return "success";
-    }
+    }*/
 
 }

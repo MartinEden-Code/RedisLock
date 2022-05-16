@@ -1,15 +1,58 @@
 package com.congge.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.congge.entity.Order;
-import com.congge.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
-/**
- * 操作数据库dao层
- */
 @Mapper
-public interface OrderMapper extends BaseMapper<Order> {
+public interface OrderMapper {
+
+    /**
+     * delete by primary key
+     *
+     * @param id primaryKey
+     * @return deleteCount
+     */
+    int deleteByPrimaryKey(String id);
+
+    /**
+     * insert record to table
+     *
+     * @param record the record
+     * @return insert count
+     */
+    int insert(Order record);
+
+    /**
+     * insert record to table selective
+     *
+     * @param record the record
+     * @return insert count
+     */
+    int insertSelective(Order record);
 
 
+    /**
+     * select by primary key
+     *
+     * @param id primary key
+     * @return object by primary key
+     */
+    Order selectByPrimaryKey(String id);
+
+
+    /**
+     * update record selective
+     *
+     * @param record the updated record
+     * @return update count
+     */
+    int updateByPrimaryKeySelective(Order record);
+
+    /**
+     * update record
+     *
+     * @param record the updated record
+     * @return update count
+     */
+    int updateByPrimaryKey(Order record);
 }
