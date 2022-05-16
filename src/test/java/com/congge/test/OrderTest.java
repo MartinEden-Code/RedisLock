@@ -85,7 +85,9 @@ public class OrderTest {
 
     @Test
     public void testCuratorLock() {
+        //1 重试策略：初试时间为3s 重试3次
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+        //2 通过工厂创建连接
         CuratorFramework client = CuratorFrameworkFactory.newClient("localhost:2181", retryPolicy);
         client.start();
         /*
